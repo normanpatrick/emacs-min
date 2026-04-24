@@ -934,10 +934,25 @@ Honour `yas-dont-activate', which see."
 (defun yas--populate-template (template &rest args)
   "Helper function to populate TEMPLATE with properties."
   (while args
-    (aset template
-          (position (intern (substring (symbol-name (car args)) 1))
-                    (mapcar #'car (get 'yas--template 'cl-struct-slots)))
-          (second args))
+    (let ((slot (intern (substring (symbol-name (car args)) 1)))
+          (value (second args)))
+      ;; Emacs 30 no longer exposes the old `cl' defstruct slot metadata
+      ;; in the way this package expects, so update fields via accessors.
+      (cond
+       ((eq slot 'key) (setf (yas--template-key template) value))
+       ((eq slot 'content) (setf (yas--template-content template) value))
+       ((eq slot 'name) (setf (yas--template-name template) value))
+       ((eq slot 'condition) (setf (yas--template-condition template) value))
+       ((eq slot 'expand-env) (setf (yas--template-expand-env template) value))
+       ((eq slot 'file) (setf (yas--template-file template) value))
+       ((eq slot 'keybinding) (setf (yas--template-keybinding template) value))
+       ((eq slot 'uuid) (setf (yas--template-uuid template) value))
+       ((eq slot 'menu-binding-pair)
+        (setf (yas--template-menu-binding-pair template) value))
+       ((eq slot 'group) (setf (yas--template-group template) value))
+       ((eq slot 'perm-group) (setf (yas--template-perm-group template) value))
+       ((eq slot 'table) (setf (yas--template-table template) value))
+       (t (error "[yas] Unknown template slot %S" slot))))
     (setq args (cddr args)))
   template)
 

@@ -7,6 +7,25 @@ A few vendored components are kept locally.
 - `yasnippet`
 - `markdown-mode`
 
+## On color and TERM
+
+```
+# check
+echo "$TERM" && echo "$COLORTERM" && emacs --version | head -n 1
+
+# set
+export TERM=xterm-256color
+export COLORTERM=truecolor
+
+# test (emacs1 is the image)
+docker run --rm -it \
+  -e TERM=xterm-256color \
+  -e COLORTERM=truecolor \
+  -v $PWD:/code \
+  -w /code emacs1 \
+  emacs -Q --load init.el
+```
+
 ## Layout
 
 - `init.el`: startup entry point
