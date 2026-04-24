@@ -1,29 +1,28 @@
 # Minimal Emacs Config
 
-This directory is a separate Emacs config you can try without touching the existing one.
+A standalone minimal Emacs configuration.
 
-It is still much smaller than the old setup, but it no longer tries to be purely built-in. A few pieces from the old config were restored because they materially affect daily use:
-- the `hc-zenburn` theme, vendored locally
-- `ido` with flex matching for file and buffer selection
-- `yasnippet`, vendored locally
-- the old global keyboard shortcuts
-- the tmux/iTerm key translation block
+A few vendored components are kept locally.
+- `hc-zenburn` theme
+- `yasnippet`
+- `markdown-mode`
 
 ## Layout
 
 - `init.el`: startup entry point
-- `lisp/core-ui.el`: theme setup, UI defaults, `ido`
-- `snippets/`: local snippet overrides and additions
-- `vendor/yasnippet-20140911.312/`: vendored snippet engine and bundled snippets
-- `vendor/markdown-mode-20181029.140/`: vendored Markdown major mode
+- `lisp/core-ui.el`: theme setup, UI defaults, `ido`, `yasnippet`
 - `lisp/core-editing.el`: editing behavior, backups, history, line numbers, CUA rectangle mode
-- `lisp/core-keys.el`: restored global keybindings and lazy package-backed bindings
-- `lisp/lang-c-cpp.el`: restored C/C++ style and outline behavior
-- `lisp/lang-markdown.el`: local Markdown mode wiring
-- `lisp/lang-python.el`: restored Python mode outline behavior
-- `lisp/lang-go.el`: restored Go mode bindings and format-on-save behavior
+- `lisp/core-keys.el`: global keybindings and lazy package-backed bindings
+- `lisp/lang-c-cpp.el`: C/C++ style and outline behavior
+- `lisp/lang-markdown.el`: Markdown file associations
+- `lisp/lang-python.el`: Python mode outline behavior
+- `lisp/lang-go.el`: Go mode bindings and format-on-save behavior
 - `lisp/lang-common-lisp.el`: optional Common Lisp support
-- `minimal-custom.el`: visual and custom-set values
+- `minimal-custom.el`: visual and `custom-set-*` values
+- `themes/`: local theme files
+- `snippets/`: local snippet overrides and additions
+- `vendor/yasnippet-20140911.312/`: vendored snippet engine and selected bundled snippets
+- `vendor/markdown-mode-20181029.140/`: vendored Markdown major mode
 - `local.el`: optional machine-specific overrides, not created by default
 
 Generated state files created by this config:
@@ -31,31 +30,32 @@ Generated state files created by this config:
 - `history`
 - `ido.last`
 
-## What This Config Currently Preserves
+## Current Behavior
 
-- your old `hc-zenburn` theme setup
-- your old fuzzy filename matching via `ido`
+- `hc-zenburn` loaded from `themes/hc-zenburn-theme.el`
+- `ido` with flex matching for file and buffer selection
 - `yasnippet` enabled globally from the vendored local copy
-- backups and autosaves in a temp directory
+- backups and autosaves stored outside project directories
 - `recentf`, `savehist`, `winner-mode`, `show-paren-mode`
-- your old global keyboard habits including `C-z`, `C-S-z`, `M-k`, `C-c o`, `F12`, `F9`
-- `windmove` shift-arrow navigation
-- tmux/iTerm key translations from the old config
+- global keybindings for window movement, window resizing, undo, buffer cleanup, and file switching
+- tmux/iTerm key translations when running inside tmux
 - encrypted file support via `epa-file`
 - C/C++ Linux style with `c-basic-offset` 4 and `outline-minor-mode`
 - Markdown files associated with `markdown-mode`
 - Python `outline-minor-mode`
-- Python `ifm<TAB>` snippet via local `yasnippet` snippets
+- Python `ifm<TAB>` snippet via local snippets
 - Go `M-a` / `M-e`, outline setup, and `gofmt-before-save` when available
 
-## What Is Still Intentionally Missing
+## Not Included By Default
 
-These are not part of startup unless you add them back on purpose:
+These are not part of startup unless explicitly reintroduced:
 - `auto-complete`
 - `undo-tree`
 - `fill-column-indicator`
-- Haskell, Go, Angular, Nix, Clojure, and similar language-specific startup wiring
-- Haskell, Angular, Nix, Clojure, and similar language-specific startup wiring
+- Haskell-specific startup wiring
+- Angular-specific startup wiring
+- Nix-specific startup wiring
+- Clojure-specific startup wiring
 - the old monolithic `nemacs.el`
 
 Some legacy package-backed keys are present as lazy wrappers, but the packages themselves are not loaded by default:
@@ -63,31 +63,41 @@ Some legacy package-backed keys are present as lazy wrappers, but the packages t
 - `ecb`
 - `ace-jump-mode`
 
-If you press one of those keys without the package being available, Emacs will raise a clear error instead of silently doing nothing.
+
+## Isolation
+
+This config stores its own runtime state locally:
+- `minimal-custom.el`
+- `recentf`
+- `history`
+- `ido.last`
+- `elpa/`
+
+Theme loading is local:
+- `themes/hc-zenburn-theme.el`
+
+Snippet loading is local:
+- `snippets/`
+- `vendor/yasnippet-20140911.312/snippets/`
+
+The normal startup path does not depend on `~/.emacs.d`.
+
+One optional exception exists in the Common Lisp module:
+- `lisp/lang-common-lisp.el` defaults to `~/.quicklisp/slime-helper.el` if that module is enabled
 
 ## How To Try It
 
-To test this config without replacing your main one:
+To test this config without replacing the main one:
 
 ```bash
 emacs -Q --load /path/to/minimal-config/init.el
 ```
 
-That starts Emacs with no normal init file and then loads this directory's config.
-
-## Notes About Theme Loading
-
-This config now vendors `hc-zenburn` locally and loads it from:
-- `themes/hc-zenburn-theme.el`
-
-`yasnippet` is also vendored locally under:
-- `vendor/yasnippet-20140911.312/`
-
-That means `minimal-config/` no longer depends on the old sibling `elpa/` tree for theme or snippet loading.
+The above starts Emacs loads this config.
 
 ## Optional Common Lisp
 
-Common Lisp support lives in `lisp/lang-common-lisp.el` and is off by default.
+Common Lisp support is available but disabled by default.
 
 To enable it, uncomment this line in `init.el`:
 
@@ -96,7 +106,7 @@ To enable it, uncomment this line in `init.el`:
 ```
 
 After enabling it:
-- `.lisp` files still use built-in `lisp-mode`
+- `.lisp` files use built-in `lisp-mode`
 - `C-c l` starts a Lisp session
 - if `~/.quicklisp/slime-helper.el` exists, `C-c l` starts SLIME
 - otherwise `C-c l` falls back to built-in `run-lisp`
@@ -105,7 +115,7 @@ Defaults:
 - Lisp program: `sbcl`
 - Quicklisp helper path: `~/.quicklisp/slime-helper.el`
 
-If you need different values, put them in `local.el`:
+If different values are needed, put them in `local.el`:
 
 ```elisp
 (setq minimal-common-lisp-program "ccl")
@@ -115,9 +125,5 @@ If you need different values, put them in `local.el`:
 
 ## Extension Strategy
 
-If you extend this config, add one small file at a time under `lisp/` and require it explicitly from `init.el`.
-
-The safest next steps are:
-1. add any language-specific modules you actually use
-2. only then decide whether old package dependencies are worth restoring
-3. keep visual settings in `minimal-custom.el` and machine-specific settings in `local.el`
+* If this config grows, add one small file at a time under `lisp/` and require it explicitly from `init.el`.
+* Keep visual settings in `minimal-custom.el` and machine-specific settings in `local.el`.
