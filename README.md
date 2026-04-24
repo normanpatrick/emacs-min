@@ -14,6 +14,7 @@ A few vendored components are kept locally.
 - `lisp/core-editing.el`: editing behavior, backups, history, line numbers, CUA rectangle mode
 - `lisp/core-keys.el`: global keybindings and lazy package-backed bindings
 - `lisp/lang-c-cpp.el`: C/C++ style and outline behavior
+- `lisp/lang-extra-modes.el`: Dockerfile, MATLAB, and Verilog mode wiring
 - `lisp/lang-markdown.el`: Markdown file associations
 - `lisp/lang-python.el`: Python mode outline behavior
 - `lisp/lang-go.el`: Go mode bindings and format-on-save behavior
@@ -23,6 +24,9 @@ A few vendored components are kept locally.
 - `snippets/`: local snippet overrides and additions
 - `vendor/yasnippet-20140911.312/`: vendored snippet engine and selected bundled snippets
 - `vendor/markdown-mode-20181029.140/`: vendored Markdown major mode
+- `vendor/dockerfile-mode-20150407.550/`: vendored Dockerfile mode
+- `vendor/matlab-mode-20200213.930/`: vendored MATLAB mode
+- `vendor/verilog-mode-2019.11.21.248091482/`: vendored Verilog mode
 - `local.el`: optional machine-specific overrides, not created by default
 
 Generated state files created by this config:
@@ -41,6 +45,9 @@ Generated state files created by this config:
 - tmux/iTerm key translations when running inside tmux
 - encrypted file support via `epa-file`
 - C/C++ Linux style with `c-basic-offset` 4 and `outline-minor-mode`
+- Dockerfile files associated with `dockerfile-mode`
+- `.m` files associated with `matlab-mode`
+- Verilog/SystemVerilog files associated with `verilog-mode`
 - Markdown files associated with `markdown-mode`
 - Python `outline-minor-mode`
 - Python `ifm<TAB>` snippet via local snippets

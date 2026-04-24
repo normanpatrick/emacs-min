@@ -23,6 +23,7 @@
 (require 'core-editing)
 (require 'core-keys)
 (require 'lang-c-cpp)
+(require 'lang-extra-modes)
 (require 'lang-markdown)
 (require 'lang-python)
 (require 'lang-go)
