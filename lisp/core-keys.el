@@ -69,6 +69,12 @@
 
 (windmove-default-keybindings)
 
+;; Restore outline folding support used by <f4>.
+(let ((outline-magic-dir
+       (expand-file-name "vendor/outline-magic-20130813.1333" minimal-config-root)))
+  (when (file-directory-p outline-magic-dir)
+    (add-to-list 'load-path outline-magic-dir)))
+
 ;; Keep the useful C/C++ file pairing from the old config.
 (setq-default cc-other-file-alist
               '(("\\.cc$"  (".hh" ".h"))
@@ -79,6 +85,7 @@
                 ("\\.cpp$" (".hpp" ".hh" ".h"))))
 
 (with-eval-after-load 'outline
+  (require 'outline-magic nil t)
   (define-key outline-minor-mode-map (kbd "<f4>") #'outline-cycle))
 
 ;; Preserve the old tmux/iTerm escape translations when running inside tmux.
