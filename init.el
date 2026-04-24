@@ -22,6 +22,8 @@
   (load custom-file nil t))
 (require 'core-editing)
 (require 'core-keys)
+(require 'lang-c-cpp)
+(require 'lang-markdown)
 (require 'lang-python)
 (require 'lang-go)
 ;; Optional language modules. Uncomment only what you actively use.

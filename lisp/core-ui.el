@@ -3,12 +3,6 @@
 (add-to-list 'custom-theme-load-path
              (expand-file-name "themes" minimal-config-root))
 
-(defun minimal--bundled-elpa-dir (prefix)
-  "Return the first nearby ELPA package dir matching PREFIX."
-  (let* ((config-parent (file-name-directory (directory-file-name minimal-config-root)))
-         (elpa-dir (expand-file-name "elpa" config-parent)))
-    (car (directory-files elpa-dir t (format "\\`%s-" (regexp-quote prefix))))))
-
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -32,9 +26,9 @@
       (expand-file-name "ido.last" minimal-config-root))
 (ido-mode 1)
 
-;; Restore snippet expansion from the checked-in yasnippet package.
-(let ((yas-dir (minimal--bundled-elpa-dir "yasnippet")))
-  (when yas-dir
+;; Restore snippet expansion from the vendored yasnippet package.
+(let ((yas-dir (expand-file-name "vendor/yasnippet-20140911.312" minimal-config-root)))
+  (when (file-directory-p yas-dir)
     (add-to-list 'load-path yas-dir)
     (require 'yasnippet)
     (setq yas-snippet-dirs

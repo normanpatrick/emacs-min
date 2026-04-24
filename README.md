@@ -3,8 +3,9 @@
 This directory is a separate Emacs config you can try without touching the existing one.
 
 It is still much smaller than the old setup, but it no longer tries to be purely built-in. A few pieces from the old config were restored because they materially affect daily use:
-- the `hc-zenburn` theme from the checked-in `elpa/` tree
+- the `hc-zenburn` theme, vendored locally
 - `ido` with flex matching for file and buffer selection
+- `yasnippet`, vendored locally
 - the old global keyboard shortcuts
 - the tmux/iTerm key translation block
 
@@ -13,8 +14,12 @@ It is still much smaller than the old setup, but it no longer tries to be purely
 - `init.el`: startup entry point
 - `lisp/core-ui.el`: theme setup, UI defaults, `ido`
 - `snippets/`: local snippet overrides and additions
+- `vendor/yasnippet-20140911.312/`: vendored snippet engine and bundled snippets
+- `vendor/markdown-mode-20181029.140/`: vendored Markdown major mode
 - `lisp/core-editing.el`: editing behavior, backups, history, line numbers, CUA rectangle mode
 - `lisp/core-keys.el`: restored global keybindings and lazy package-backed bindings
+- `lisp/lang-c-cpp.el`: restored C/C++ style and outline behavior
+- `lisp/lang-markdown.el`: local Markdown mode wiring
 - `lisp/lang-python.el`: restored Python mode outline behavior
 - `lisp/lang-go.el`: restored Go mode bindings and format-on-save behavior
 - `lisp/lang-common-lisp.el`: optional Common Lisp support
@@ -30,13 +35,15 @@ Generated state files created by this config:
 
 - your old `hc-zenburn` theme setup
 - your old fuzzy filename matching via `ido`
-- `yasnippet` enabled globally from the checked-in `elpa/` tree
+- `yasnippet` enabled globally from the vendored local copy
 - backups and autosaves in a temp directory
 - `recentf`, `savehist`, `winner-mode`, `show-paren-mode`
 - your old global keyboard habits including `C-z`, `C-S-z`, `M-k`, `C-c o`, `F12`, `F9`
 - `windmove` shift-arrow navigation
 - tmux/iTerm key translations from the old config
 - encrypted file support via `epa-file`
+- C/C++ Linux style with `c-basic-offset` 4 and `outline-minor-mode`
+- Markdown files associated with `markdown-mode`
 - Python `outline-minor-mode`
 - Python `ifm<TAB>` snippet via local `yasnippet` snippets
 - Go `M-a` / `M-e`, outline setup, and `gofmt-before-save` when available
@@ -73,7 +80,10 @@ That starts Emacs with no normal init file and then loads this directory's confi
 This config now vendors `hc-zenburn` locally and loads it from:
 - `themes/hc-zenburn-theme.el`
 
-That means `minimal-config/` no longer depends on the old sibling `elpa/` tree for theme loading.
+`yasnippet` is also vendored locally under:
+- `vendor/yasnippet-20140911.312/`
+
+That means `minimal-config/` no longer depends on the old sibling `elpa/` tree for theme or snippet loading.
 
 ## Optional Common Lisp
 
