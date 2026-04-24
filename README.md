@@ -7,6 +7,14 @@ A few vendored components are kept locally.
 - `yasnippet`
 - `markdown-mode`
 
+```
+cd $HOME
+
+# move, back-up, clean any existing .emacs.d & related
+# make this the main emacs config
+git clone https://github.com/normanpatrick/emacs-min .emacs.d
+```
+
 ## On color and TERM
 
 ```
