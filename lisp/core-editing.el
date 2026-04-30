@@ -16,11 +16,15 @@
 (setq recentf-max-saved-items 100)
 (setq recentf-save-file (expand-file-name "recentf" minimal-config-root))
 (setq savehist-file (expand-file-name "history" minimal-config-root))
+(setq bookmark-default-file
+      (expand-file-name "bookmarks" minimal-config-root))
+(setq bookmark-save-flag 1)
 (setq make-backup-files t)
 (setq backup-by-copying t)
 
 (savehist-mode 1)
 (recentf-mode 1)
+(setq bookmark-watch-bookmark-file 'silent)
 
 ;; Store transient files outside project directories.
 (defvar minimal-temporary-file-directory

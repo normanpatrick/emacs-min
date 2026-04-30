@@ -60,6 +60,7 @@ Generated state files created by this config:
 - `recentf`
 - `history`
 - `ido.last`
+- `bookmarks` for built-in named bookmarks
 
 ## Current Behavior
 
@@ -68,7 +69,9 @@ Generated state files created by this config:
 - `yasnippet` enabled globally from the vendored local copy
 - backups and autosaves stored outside project directories
 - `recentf`, `savehist`, `winner-mode`, `show-paren-mode`
-- global keybindings for window movement, window resizing, undo, buffer cleanup, and file switching
+- visual line bookmarks via vendored `linemark`
+- built-in named bookmark persistence in `bookmarks`
+- global keybindings for window movement, window resizing, undo/redo, buffer cleanup, file switching, bookmarks, and basic symbol completion
 - tmux/iTerm key translations when running inside tmux
 - encrypted file support via `epa-file`
 - C/C++ Linux style with `c-basic-offset` 4 and `outline-minor-mode`
@@ -83,7 +86,6 @@ Generated state files created by this config:
 ## Not Included By Default
 
 These are not part of startup unless explicitly reintroduced:
-- `auto-complete`
 - `undo-tree`
 - `fill-column-indicator`
 - Haskell-specific startup wiring
@@ -93,7 +95,6 @@ These are not part of startup unless explicitly reintroduced:
 - the old monolithic `nemacs.el`
 
 Some legacy package-backed keys are present as lazy wrappers, but the packages themselves are not loaded by default:
-- `bm`
 - `ecb`
 - `ace-jump-mode`
 
@@ -105,6 +106,7 @@ This config stores its own runtime state locally:
 - `recentf`
 - `history`
 - `ido.last`
+- `bookmarks`
 - `elpa/`
 
 Theme loading is local:
@@ -113,6 +115,36 @@ Theme loading is local:
 Snippet loading is local:
 - `snippets/`
 - `vendor/yasnippet-20140911.312/snippets/`
+
+File and buffer selection uses `ido` with flex matching.
+
+Symbol completion uses built-in commands:
+- `M-/` runs `hippie-expand`
+- `M-TAB` runs `completion-at-point`
+
+This is built-in completion, not popup menu auto-complete.
+
+Bookmark commands use the old line-bookmark workflow:
+- `C-c b` toggles a bookmark on the current line
+- `F2` toggles a bookmark on the current line
+- `S-F2` moves to the previous bookmark in the current buffer
+- `C-F2` moves to the next bookmark in the current buffer
+- `C-S-F2` clears all bookmarks in the current buffer
+- `C-c p` moves to the previous bookmark in the current buffer
+- `C-c n` moves to the next bookmark in the current buffer
+- `C-c C-b` clears all bookmarks in the current buffer
+
+These visual line bookmarks are separate from built-in named bookmarks and are not stored in the `bookmarks` file.
+
+Built-in named bookmarks are still available:
+- `C-x r m` sets a named bookmark
+- `C-x r b` jumps to a named bookmark
+- `C-x r l` lists named bookmarks
+
+Undo/redo keys:
+- `C-z` runs undo
+- `C-S-z` runs redo when the input system distinguishes it from `C-z`
+- `C-c z` runs redo reliably in terminal Emacs
 
 The normal startup path does not depend on `~/.emacs.d`.
 

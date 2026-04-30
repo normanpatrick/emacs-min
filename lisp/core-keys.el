@@ -9,13 +9,10 @@
       (call-interactively command)
     (user-error "Command %s requires package %s" command feature)))
 
-(defun minimal-bm-toggle ()
-  (interactive)
-  (minimal-call-package-command 'bm #'bm-toggle))
-
-(defun minimal-bm-next ()
-  (interactive)
-  (minimal-call-package-command 'bm #'bm-next))
+(let ((linemark-dir
+       (expand-file-name "vendor/matlab-mode-20200213.930" minimal-config-root)))
+  (when (file-directory-p linemark-dir)
+    (add-to-list 'load-path linemark-dir)))
 
 (defun minimal-ecb-activate ()
   (interactive)
@@ -33,7 +30,46 @@
   (interactive)
   (minimal-call-package-command 'ace-jump-mode #'ace-jump-mode-pop-mark))
 
+(defun minimal-visual-bookmark-command (command)
+  "Call visual bookmark COMMAND from vendored `linemark'."
+  (interactive)
+  (minimal-call-package-command 'linemark command))
+
+(defun minimal-visual-bookmark-toggle ()
+  (interactive)
+  (minimal-visual-bookmark-command #'viss-bookmark-toggle))
+
+(defun minimal-visual-bookmark-next ()
+  (interactive)
+  (minimal-visual-bookmark-command #'viss-bookmark-next-buffer))
+
+(defun minimal-visual-bookmark-prev ()
+  (interactive)
+  (minimal-visual-bookmark-command #'viss-bookmark-prev-buffer))
+
+(defun minimal-visual-bookmark-clear ()
+  (interactive)
+  (minimal-visual-bookmark-command #'viss-bookmark-clear-all-buffer))
+
+(defun minimal-redo ()
+  "Redo the most recent undo.
+
+On Emacs 28+, use `undo-redo'. On Emacs 27, redo works by
+breaking the consecutive-undo chain and then calling `undo' again."
+  (interactive)
+  (cond
+   ((fboundp 'undo-redo)
+    (undo-redo))
+   ((memq last-command '(undo minimal-redo))
+    (setq last-command 'minimal-redo-break)
+    (undo))
+   (t
+    (user-error "Redo is only available immediately after undo on this Emacs"))))
+
 (global-set-key (kbd "C-x C-r") #'recentf-open-files)
+(global-set-key (kbd "C-x r m") #'bookmark-set)
+(global-set-key (kbd "C-x r b") #'bookmark-jump)
+(global-set-key (kbd "C-x r l") #'list-bookmarks)
 (global-set-key (kbd "M-k")
                 (lambda ()
                   (interactive)
@@ -44,17 +80,26 @@
 (global-set-key (kbd "C-c <right>") #'winner-redo)
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-z") #'undo)
-(global-set-key (kbd "C-S-z") #'undo-redo)
+(global-set-key (kbd "C-S-z") #'minimal-redo)
+(global-set-key (kbd "C-c z") #'minimal-redo)
+(global-set-key (kbd "M-/") #'hippie-expand)
+(global-set-key (kbd "M-TAB") #'completion-at-point)
 (global-set-key (kbd "S-C-<left>") #'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") #'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") #'shrink-window)
 (global-set-key (kbd "S-C-<up>") #'enlarge-window)
-(global-set-key (kbd "<f2>") #'minimal-bm-next)
+(global-set-key (kbd "<f2>") #'minimal-visual-bookmark-toggle)
+(global-set-key (kbd "S-<f2>") #'minimal-visual-bookmark-prev)
+(global-set-key (kbd "C-<f2>") #'minimal-visual-bookmark-next)
+(global-set-key (kbd "C-S-<f2>") #'minimal-visual-bookmark-clear)
+(global-set-key (kbd "C-c p") #'minimal-visual-bookmark-prev)
+(global-set-key (kbd "C-c n") #'minimal-visual-bookmark-next)
+(global-set-key (kbd "C-c C-b") #'minimal-visual-bookmark-clear)
 (global-set-key (kbd "<f5>") #'minimal-ecb-activate)
 (global-set-key (kbd "S-<f5>") #'minimal-ecb-deactivate)
 (global-set-key (kbd "<f9>") #'gdb-many-windows)
 (global-set-key (kbd "<f12>") #'tool-bar-mode)
-(global-set-key (kbd "C-c b") #'minimal-bm-toggle)
+(global-set-key (kbd "C-c b") #'minimal-visual-bookmark-toggle)
 (global-set-key (kbd "C-c SPC") #'minimal-ace-jump-mode)
 (global-set-key (kbd "C-x SPC") #'minimal-ace-jump-pop-mark)
 
